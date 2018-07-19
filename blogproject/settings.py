@@ -126,4 +126,4 @@ USE_TZ = False     # 使用mysql的话，需要把这个改成FALSE，不然根�
 STATIC_URL = '/static/'
 # MEDIA_URL = "/media/"             # django上传图片，需要加上(这个貌似没有也可以)
 MEDIA_ROOT = os.path.join(BASE_DIR, "blog/static")   # django上传图片，需要加上
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'blog/static')
