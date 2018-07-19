@@ -1,0 +1,181 @@
+{% load staticfiles %}
+{% load blog_tags %}
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>近涛个人博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'blog/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/m.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/highlights/github.css' %}">
+<link rel="shortcut icon" href="../../static/blog/images/favicon.ico">
+<script src="{% static 'blog/js/jquery-2.1.3.min.js' %}"></script>
+
+<!--[if lt IE 9]>
+<script src="{% static 'blog/js/modernizr.js' %}"></script>
+<![endif]-->
+<style type="text/css">
+span{
+   word-break: break-all;
+   white-space: normal;
+}
+</style>
+</head>
+<body>
+<header>
+<div id="mnav">
+   <div class="logo"><a href="/">近涛个人博客</a></div>
+    <h2 id="mnavh"><span class="navicon"></span></h2>
+    <ul id="starlist">
+      <li><a href="/">首页</a></li>
+      <li><a href="{% url 'blog:category_list' %}">分类</a></li>
+{#      <li><a href="index.html">登录/注册</a></li>#}
+    </ul>
+</div>
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementById("mnavh"); 
+	var oUl = document.getElementById("starlist");  
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</header>
+<div class="line46"></div>
+<div class="blank"></div>
+<article>
+  <div class="leftbox">
+    <div class="infos">
+      <div class="newsview">
+        <h2 class="intitle">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">文章详情</a></h2>
+        <h3 class="news_title">{{ post.title }}</h3>
+        <div class="news_author"><span class="au01">{{ post.author }}</span><span class="au02">{{ post.created_time }}</span><span class="au03">共<b>{{ post.views }}</b>人围观</span></div>
+        <div class="tags">
+            {% for tag in post.tags.all %}
+            <a href="/">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        <div class="news_about"><strong>简介</strong>{{ post.excerpt }}</div>
+        <div class="news_infos">
+          {{ post.body|safe }}
+        </div>
+      </div>
+      <div class="share">
+      <form name="loves" id="loves">
+          {% csrf_token %}
+          <p class="diggit"><a> 很赞哦！ </a>(<b id="diggnum">{{ post.loves }}</b>)</p>
+      </form>
+      <p class="dasbox"><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏本站</a></p>
+      <div class="hide_box" style="display: none;"></div>
+      <div class="shang_box" style="display: none;"> <a class="shang_close" href="javascript:void(0)" onclick="dashangToggle()" title="关闭">关闭</a>
+        <div class="shang_tit">
+          <p>感谢您的支持，我会继续努力的!</p>
+        </div>
+        <div class="shang_payimg"> <img src="../../static/blog/images/alipayimg.png" alt="扫码支持" title="扫一扫"> </div>
+        <div class="pay_explain">扫码打赏，你说多少就多少</div>
+        <div class="shang_payselect">
+          <div class="pay_item checked" data-id="alipay"> <span class="radiobox"></span> <span class="pay_logo"><img src="../../static/blog/images/alipay.jpg" alt="支付宝"></span> </div>
+          <div class="pay_item" data-id="weipay"> <span class="radiobox"></span> <span class="pay_logo"><img src="../../static/blog/images/wechat.jpg" alt="微信"></span> </div>
+        </div>
+        <script type="text/javascript">
+    $(function(){
+    	$(".pay_item").click(function(){
+    		$(this).addClass('checked').siblings('.pay_item').removeClass('checked');
+    		var dataid=$(this).attr('data-id');
+    		$(".shang_payimg img").attr("src","../../static/blog/images/"+dataid+"img.png");
+    		$("#shang_pay_txt").text(dataid=="alipay"?"支付宝":"微信");
+    	});
+    });
+    function dashangToggle(){
+    	$(".hide_box").fadeToggle();
+    	$(".shang_box").fadeToggle();
+    }
+    </script> 
+      </div>
+    </div>
+    <!--share end-->
+    </div>
+    <div class="nextinfo">
+      {% if before_page %}
+      <p>上一篇：<a href="{% url 'blog:detail' pk=before_page.pk %}" >{{ before_page.title }}</a></p>
+      {% endif %}
+      {% if after_page %}
+      <p>下一篇：<a href="{% url 'blog:detail' pk=after_page.pk %}">{{ after_page.title }}</a></p>
+      {% endif %}
+    </div>
+
+    <div class="news_pl">
+      <h2>文章评论</h2>
+      <ul>
+            <!--PC和WAP自适应版-->
+            <div id="SOHUCS" sid="{{ post.pk }}" ></div>
+            <script type="text/javascript">
+            (function(){
+            var appid = 'cyt15gs25';
+            var conf = 'prod_77ed93786c486fdb49954518a803c4ae';
+            var width = window.innerWidth || document.documentElement.clientWidth;
+            if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+      </ul>
+    </div>
+  </div>
+  <div class="rightbox">
+    <div class="paihang" style="margin-top: 0px;">
+      <h2 class="ab_title"><a href="/">点击排行</a></h2>
+      {% get_click_post as click_posts %}
+      <ul>
+        {% for post in click_posts %}
+        <li>
+          <b>{{ post.title }}</b>
+          <a href="{{ post.get_absolute_url }}">
+              <p><i><img src="{% static post.ph %}"></i>{{ post.excerpt|truncatechars:35 }}</p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="paihang">
+      <div class="ad"><img src="../../static/blog/images/ad300x100.jpg"></div>
+    </div>
+    <div class="weixin">
+      <h2 class="ab_title">微信公众号</h2>
+      <ul>
+        <img src="../../static/blog/images/wx.png">
+      </ul>
+    </div>
+  </div>
+</article>
+<footer>
+  <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
+</footer>
+</body>
+
+<script>
+    {#<!--增加点赞量-->#}
+    $("#loves").on("click",function () {
+        $.ajax({
+            url:"{% url 'blog:loves' post.pk%}",
+            type:"GET",
+            dataType:'json',
+            success:function (result) {
+                if(result["success"]){
+                    {#<!--如果返回的是一个json，比较复杂的数据，可以这么取#}
+                    {#var json = eval(result);#}
+                    {#alert(json.list[0].fields.loves)#}
+                    {#-->#}
+                    $("#diggnum").html(result["loves"]);
+                }else{
+
+                }
+            }
+        })
+    })
+</script>
+</html>

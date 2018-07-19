@@ -1,0 +1,172 @@
+{% load staticfiles %}
+{% load blog_tags %}
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>近涛个人博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'blog/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/m.css' %}">
+{#引入网站图标#}
+<link rel="shortcut icon" href="../../static/blog/images/favicon.ico">
+<!--[if lt IE 9]>
+    <script src="{% static 'blog/js/modernizr.js' %}"></script>
+<![endif]-->
+</head>
+<body>
+<header>
+<div id="mnav">
+   <div class="logo"><a href="/">近涛个人博客</a></div>
+    <h2 id="mnavh"><span class="navicon"></span></h2>
+    <ul id="starlist">
+      <li><a href="/">首页</a></li>
+      <li><a href="{% url 'blog:category_list' %}">分类</a></li>
+{#      <li><a href="index.html">登录/注册</a></li>#}
+    </ul>
+</div>
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementById("mnavh"); 
+	var oUl = document.getElementById("starlist");  
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</header>
+<div class="line46"></div>
+<article>
+  <div class="leftbox">
+    <div class="newblogs">
+      <h2 class="intitle" style="margin-top: 20px">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">分类</a></h2>
+      {% for post in post_list %}
+      <ul>
+        <li>
+          <h3 class="blogtitle"><a href="{{ post.get_absolute_url }}" target="_blank" >{{ post.title }}</a></h3>
+          <div class="bloginfo"><span class="blogpic"><a href="/" title=""><img src="{% static post.ph %}"  /></a></span>
+            <p>{{ post.excerpt }}</p>
+          </div>
+          <div class="autor"><span class="lm f_l"><a href="/">近涛个人博客</a></span><span class="dtime f_l">{{ post.created_time|date:"Y-m-d" }}</span><span class="viewnum f_l">浏览（<a href="/">{{ post.views }}</a>）</span><span class="pingl f_l">喜欢（<a href="/">{{ post.loves }}</a>）</span><span class="f_r"><a href="{{ post.get_absolute_url }}" class="more">阅读原文>></a></span></div>
+        </li>
+        {% empty %}
+          <div class="">暂时还没有发布的文章！</div>
+        {% endfor %}
+      <div class="pagelist">
+      {% if post_count != 0 %}
+        {#当前页#}
+        <a>{{ currentPage }}/{{ totalPage }}</a>
+        {#上一页#}
+        {% if post_list.has_previous %}
+            <a id='before' href="" onclick="previousPage()" class="curPage">上一页</a>
+        {% else %}
+            <a href ="javascript:return false;" class="curPage " style="opacity:0.2">上一页</a>
+        {% endif %}
+        {#下一页#}
+        {% if post_list.has_next %}
+             <a  id='next' href="" onclick="nextPage()" class="curPage">下一页</a>
+        {% else %}
+            <a href ="javascript:return false;" class="curPage " style="opacity:0.2">下一页</a>
+        {% endif %}
+       {% endif %}
+      </div>
+      </ul>
+
+    </div>
+  </div>
+  <div class="rightbox">
+    <div class="blank"></div>
+    <div class="search">
+      <form action="{% url 'blog:search_list' %}" method="get" name="searchform" id="searchform">
+        <input name="keyboard_list" id="keyboard_list" class="input_text" value="" type="text" placeholder="请输入关键字">
+        <input name="Submit" class="input_submit" value="搜索" type="submit">
+      </form>
+    </div>
+    <div class="paihang">
+      <h2 class="ab_title"><a href="/">文章分类</a></h2>
+      {% get_category_article_nums as category_list %}
+      <ul>
+        {% for category in category_list %}
+        <li>
+        <a href="{% url 'blog:category' category.pk %}">
+          <b>{{ category.name }}({{ category.num_posts }})</b>
+          <p><i><img src="{% static category.category_ph %}"></i>{{ category.describes }}</p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="paihang">
+      <div class="ad"><img src="../../static/blog/images/ad300x100.jpg"></div>
+    </div>
+    <div class="weixin">
+      <h2 class="ab_title">微信公众号</h2>
+      <ul>
+        <img src="../../static/blog/images/wx.png">
+      </ul>
+    </div>
+  </div>
+</article>
+<footer>
+  <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
+</footer>
+</body>
+<script>
+    function getUrl() {
+        var current_url = window.location.href;
+        var params = current_url.split('?');
+        var url =  '';
+
+        //没有参数
+        if (params.length == 1){
+            url += '?'
+        }
+        else {
+                for (var i = 0; i < params.length; i++) {
+                    //如果page出现的位置在？后面
+                    if (params[i].indexOf('page') == -1) {
+                        if (i==0){
+                            url += params[i] + '?'
+                        }else{
+                            url += params[i] + '&'
+                        }
+                    }
+                    //如果page不时出现在？后面并且不是host地址，代表以及翻过页了（因为我们这里翻过页了会将page拼到末尾）
+                    //我们就去找到page出现的位置，然后截取出？后面，除了page=xxx以为的字符（即截取出不带page的搜索条件）
+                    if (params[i].indexOf('page') != -1 & i!=0){
+                        var split_end = params[i].indexOf('page')
+                        url += params[i].substring(0,split_end)
+                    }
+                }
+            }
+        return url
+    }
+
+    //点击下一页时候，去给href赋上我们拼接的值
+    function nextPage() {
+        var url = getUrl()
+        {% if post_list.has_next %}
+            var href = url+"page={{ post_list.next_page_number }}"
+        {% else %}
+            var href = url+"page={{ post_list.number }}"
+        {% endif %}
+
+        document.getElementById("next").href=href
+    }
+    //点击上一页时候，去给href赋上我们拼接的值
+    function previousPage() {
+        var url = getUrl()
+        {% if post_list.has_previous %}
+            var href = url+"page={{ post_list.previous_page_number}}"
+        {% else %}
+            var href = url+"page={{ currentPage }}"
+        {% endif %}
+         document.getElementById("before").href=href
+    }
+</script>
+</html>
