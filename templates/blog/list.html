@@ -45,8 +45,8 @@ window.onload = function ()
   <div class="leftbox">
     <div class="newblogs">
       <h2 class="intitle" style="margin-top: 20px">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">分类</a></h2>
+      <ul id="list">
       {% for post in post_list %}
-      <ul>
         <li>
           <h3 class="blogtitle"><a href="{{ post.get_absolute_url }}" target="_blank" >{{ post.title }}</a></h3>
           <div class="bloginfo"><span class="blogpic"><a href="/" title=""><img src="{% static post.ph %}"  /></a></span>
@@ -102,7 +102,7 @@ window.onload = function ()
       </ul>
     </div>
     <div class="paihang">
-      <div class="ad"><img src="../../static/blog/images/ad300x100.jpg"></div>
+      <div class="ad"><a href="https://promotion.aliyun.com/ntms/act/group/team.html?group=dPtcChC65d" target="_blank"><img src="../../static/blog/images/ad2.png"></a></div>
     </div>
     <div class="weixin">
       <h2 class="ab_title">微信公众号</h2>
