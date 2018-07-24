@@ -52,8 +52,8 @@ window.onload = function ()
         {% for post in post_list %}
         <li>
           <h3 class="blogtitle"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-          <div class="bloginfo"><span class="blogpic"><a href="/" title=""><img src="{% static post.ph %}"  /></a></span>
-            <p>{{ post.excerpt }}</p>
+          <div class="bloginfo"><span class="blogpic"><a href="{{ post.get_absolute_url }}" title=""><img src="{% static post.ph %}"  /></a></span>
+              <a href="{{ post.get_absolute_url }}"><p>{{ post.excerpt }}</p></a>
           </div>
           <div class="autor"><span class="lm f_l"><a href="/">近涛个人博客</a></span><span class="dtime f_l">{{ post.created_time|date:"Y-m-d" }}</span><span class="viewnum f_l">浏览（<a href="/">{{ post.views }}</a>）</span><span class="pingl f_l">喜欢（<a href="/">{{ post.loves }}</a>）</span><span class="f_r"><a href="{{ post.get_absolute_url }}" class="more">阅读原文</a></span></div>
         </li>

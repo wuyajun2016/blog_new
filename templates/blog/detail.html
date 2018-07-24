@@ -56,10 +56,10 @@ window.onload = function ()
     <div class="infos">
       <div class="newsview">
         {% if get_life == 0 %}
-        <h2 class="intitle">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">分类</a>&nbsp;&gt;&nbsp;<a href="/">文章详情</a></h2>
+        <h2 class="intitle">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="{% url 'blog:category_list' %}">分类</a>&nbsp;&gt;&nbsp;<a>文章详情</a></h2>
         {% endif %}
         {% if get_life == 1 %}
-        <h2 class="intitle">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">享生活</a>&nbsp;&gt;&nbsp;<a href="/">文章详情</a></h2>
+        <h2 class="intitle">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="{% url 'blog:life' %}">享生活</a>&nbsp;&gt;&nbsp;<a>文章详情</a></h2>
         {% endif %}
         <h3 class="news_title">{{ post.title }}</h3>
         <div class="news_author"><span class="au01">{{ post.author }}</span><span class="au02">{{ post.created_time }}</span><span class="au03">共<b>{{ post.views }}</b>人围观</span></div>
