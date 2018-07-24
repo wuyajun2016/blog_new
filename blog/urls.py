@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^search_list/$', views.search_list, name='search_list'),
     url(r'^loves/(?P<pk>[0-9]+)/$', views.loves, name='loves'),
-    url(r'^category/$', views.category_list, name='category_list')
+    url(r'^category/$', views.category_list, name='category_list'),
+    url(r'^life/$', views.life, name='life')
 ]

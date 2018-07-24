@@ -14,21 +14,20 @@
 <!--[if lt IE 9]>
     <script src="{% static 'blog/js/modernizr.js' %}"></script>
 <![endif]-->
-
 </head>
 <body>
 <header>
-  <div id="mnav">
-    <div class="logo"><a href="/">近涛个人博客</a></div>
+<div id="mnav">
+   <div class="logo"><a href="/">近涛个人博客</a></div>
     <h2 id="mnavh"><span class="navicon"></span></h2>
     <ul id="starlist">
       <li><a href="/">首页</a></li>
       <li><a href="{% url 'blog:category_list' %}">分类</a></li>
-      <li><a href="{% url 'blog:life'%}">享生活</a></li>
+      <li><a href="{% url 'blog:life' %}">享生活</a></li>
 {#      <li><a href="index.html">登录/注册</a></li>#}
     </ul>
-  </div>
-  <script>
+</div>
+<script>
 window.onload = function ()
 {
 	var oH2 = document.getElementById("mnavh"); 
@@ -40,22 +39,21 @@ window.onload = function ()
 		oH2.className = style.display == "block" ? "open" : ""
 	}
 }
-</script> 
+</script>
 </header>
 <div class="line46"></div>
 <article>
-  <div class="blank"></div>
   <div class="leftbox">
-    <div class="newblogs" style="margin-top: 0px">
-      <h2 class="hometitle">全部文章</h2>
+    <div class="newblogs">
+      <h2 class="intitle" style="margin-top: 20px">您现在的位置是：<a href="/">网站首页</a>&nbsp;&gt;&nbsp;<a href="/">分类</a></h2>
       <ul id="list">
-        {% for post in post_list %}
+      {% for post in post_list %}
         <li>
-          <h3 class="blogtitle"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+          <h3 class="blogtitle"><a href="{{ post.get_absolute_url }}" target="_blank" >{{ post.title }}</a></h3>
           <div class="bloginfo"><span class="blogpic"><a href="/" title=""><img src="{% static post.ph %}"  /></a></span>
             <p>{{ post.excerpt }}</p>
           </div>
-          <div class="autor"><span class="lm f_l"><a href="/">近涛个人博客</a></span><span class="dtime f_l">{{ post.created_time|date:"Y-m-d" }}</span><span class="viewnum f_l">浏览（<a href="/">{{ post.views }}</a>）</span><span class="pingl f_l">喜欢（<a href="/">{{ post.loves }}</a>）</span><span class="f_r"><a href="{{ post.get_absolute_url }}" class="more">阅读原文</a></span></div>
+          <div class="autor"><span class="lm f_l"><a href="/">近涛个人博客</a></span><span class="dtime f_l">{{ post.created_time|date:"Y-m-d" }}</span><span class="viewnum f_l">浏览（<a href="/">{{ post.views }}</a>）</span><span class="pingl f_l">喜欢（<a href="/">{{ post.loves }}</a>）</span><span class="f_r"><a href="{{ post.get_absolute_url }}" class="more">阅读原文>></a></span></div>
         </li>
         {% empty %}
           <div class="">暂时还没有发布的文章！</div>
@@ -74,53 +72,17 @@ window.onload = function ()
         {% if post_list.has_next %}
              <a  id='next' href="" onclick="nextPage()" class="curPage">下一页</a>
         {% else %}
-            <a href ="javascript:return false;" class="curPage" style="opacity:0.2">下一页</a>
+            <a href ="javascript:return false;" class="curPage " style="opacity:0.2">下一页</a>
         {% endif %}
        {% endif %}
       </div>
       </ul>
-      <ul id="list2">
-      </ul>
-    </div>
 
+    </div>
   </div>
   <div class="rightbox">
-    <div class="aboutme">
-      <h2 class="ab_title">关于我</h2>
-      <div class="avatar"><img src="../static/blog/images/aboutme.jpg" /></div>
-      <div class="ab_con">
-        <p>网名：近涛</p>
-        <p>职业：闲人 </p>
-        <p>籍贯：浙江省―乐清市</p>
-        <p>邮箱：491395033@qq.com</p>
-      </div>
-    </div>
-    <div class="blank"></div>
-    <div class="search">
-      <form action="{% url 'blog:search' %}" method="get" name="searchform" id="searchform">
-        <input name="keyboard" id="keyboard" class="input_text" value="" type="text" placeholder="请输入关键字">
-        <input name="Submit" class="input_submit" value="搜索" type="submit">
-      </form>
-    </div>
     <div class="paihang">
-      <h2 class="ab_title"><a href="/">点击排行</a></h2>
-      {% get_click_post as click_posts %}
-      <ul>
-        {% for post in click_posts %}
-        <li>
-          <b>{{ post.title }}</b>
-          <a href="{{ post.get_absolute_url }}">
-              <p><i><img src="{% static post.ph %}"></i>{{ post.excerpt|truncatechars:35 }}</p>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="links">
-      <h2 class="ab_title">友情链接</h2>
-      <ul>
-        <li><a href="http://www.wuzihan.top/" target="_blank">近涛的博客</a></li>
-      </ul>
+      <div class="ad"><a href="https://promotion.aliyun.com/ntms/act/group/team.html?group=dPtcChC65d" target="_blank"><img src="../../static/blog/images/ad2.png"></a></div>
     </div>
     <div class="weixin">
       <h2 class="ab_title">微信公众号</h2>

@@ -12,7 +12,9 @@ import pdb
 # 类似controller层，查询数据库，返回对应数据给前端展示
 # 首页
 def index(request):
-    post_list = Post.objects.all().order_by('-created_time')
+    # category_id = list(Category.objects.filter(name='生活').values('id'))[0].get('id')    # 找出category名称为‘生活’的id，可再用这个id
+    # post_list = Post.objects.exclude(category=category_id).order_by('-created_time')      # 再用这个id去过滤出对应该类目的文章
+    post_list = Post.objects.filter(life=0).order_by('-created_time')
     # 调用分页方法，取出返回数据传给对应页面
     page_list = page_turn(request, post_list)
     post_count = page_list.get('post_count')
@@ -30,7 +32,7 @@ def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)    # django get操作，也就封装了一个返回对象为空时候的处理
     # 上一篇/下一篇
     # 取出全部文章，再拿该篇文章跟全部文章的title做比较，以用来判断当前文章处在第一/最后/中间
-    post_all = Post.objects.all()
+    post_all = Post.objects.filter(life=0)
     page_list = list(post_all)
     # pdb.set_trace()
     if post == page_list[0]:
@@ -58,7 +60,7 @@ def detail(request, pk):
                                                         'after_page': after_page})
 
 
-# 归档跳转
+# 归档跳转(目前没有使用)
 # 注意下，这里的created_time 是 Python 的 date 对象
 # 另外，created_time__year本来应当是created_time.year，由于这里当作参数故需要使用created_time__year
 def archives(request, year, month):
@@ -89,7 +91,8 @@ def search(request):
     # post_list_all = Post.objects.all().order_by('-created_time')
     # if not q:
     #     return render(request, 'blog/index.html', {'post_list': post_list_all})
-    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q)).order_by('-created_time')
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q)).filter(life=0)\
+        .order_by('-created_time')
     # 调用分页方法，取出返回数据传给对应页面
     page_list = page_turn(request, post_list)
     post_count = page_list.get('post_count')
@@ -103,7 +106,7 @@ def search(request):
 
 
 def category_list(request):
-    post_list = Post.objects.all().order_by('-created_time')
+    post_list = Post.objects.filter(life=0).order_by('-created_time')
     # 调用分页方法，取出返回数据传给对应页面
     page_list = page_turn(request, post_list)
     post_count = page_list.get('post_count')
@@ -122,7 +125,7 @@ def search_list(request):
     # post_list_all = Post.objects.all().order_by('-created_time')
     # if not q:
     #     return render(request, 'blog/list.html', {'post_list': post_list_all})
-    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q)).filter(life=0)
     # 调用分页方法，取出返回数据传给对应页面
     page_list = page_turn(request, post_list)
     post_count = page_list.get('post_count')
@@ -153,6 +156,20 @@ def loves(request, pk):
     response_data["success"] = True
     response_data["loves"] = to_laud_value
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+# life
+def life(request):
+    post_list = Post.objects.filter(life=1)
+    # 调用分页方法，取出返回数据传给对应页面
+    page_list = page_turn(request, post_list)
+    post_count = page_list.get('post_count')
+    paginator = page_list.get('paginator')
+    page = page_list.get('page')
+    currentPage = page_list.get('currentPage')
+    totalPage = page_list.get('totalPage')
+    post_list = page_list.get('post_list')
+    return render(request, 'blog/life.html', locals())
 
 
 # 分页方法

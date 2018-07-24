@@ -47,6 +47,7 @@ class Post(models.Model):
     ph = models.ImageField(u'图片', upload_to='uploadImages')
     views = models.PositiveIntegerField(default=0)
     loves = models.PositiveIntegerField(default=0)
+    life = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag, blank=True)
     author = models.ForeignKey(User)
