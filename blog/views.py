@@ -30,10 +30,14 @@ def index(request):
 # 详情页
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)    # django get操作，也就封装了一个返回对象为空时候的处理
+    glife = Post.objects.filter(pk=pk).values('life')
+    get_life = list(glife)[0].get('life')
     # 上一篇/下一篇
     # 取出全部文章，再拿该篇文章跟全部文章的title做比较，以用来判断当前文章处在第一/最后/中间
-    post_all = Post.objects.filter(life=0)
-    page_list = list(post_all)
+    if get_life == 1:
+        page_list = list(Post.objects.filter(life=1))
+    else:
+        page_list = list(Post.objects.filter(life=0))
     # pdb.set_trace()
     if post == page_list[0]:
         before_page = None
@@ -56,7 +60,7 @@ def detail(request, pk):
                                       'markdown.extensions.toc',
                                   ])
 
-    return render(request, 'blog/detail.html', context={'post': post, 'before_page': before_page,
+    return render(request, 'blog/detail.html', context={'post': post, 'before_page': before_page, 'get_life': get_life,
                                                         'after_page': after_page})
 
 
