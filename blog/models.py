@@ -78,4 +78,12 @@ class Post(models.Model):
         self.loves += 1
         self.save(update_fields=['loves'])
 
+# 点赞数量一个IP只能点赞一次
+class Poll(models.Model):
+    ip = models.CharField(max_length=100, null=True, blank=True)
+    blog = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.blog
+
 

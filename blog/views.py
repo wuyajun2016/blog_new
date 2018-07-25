@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from blog.models import Post, Category, Tag
+from blog.models import Post, Category, Tag, Poll
 import markdown
 from django.db.models import Q
 from django.http import HttpResponse
@@ -30,6 +30,7 @@ def index(request):
 # 详情页
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)    # django get操作，也就封装了一个返回对象为空时候的处理
+    # 拿到文章对应的life值
     glife = Post.objects.filter(pk=pk).values('life')
     get_life = list(glife)[0].get('life')
     # 上一篇/下一篇
@@ -142,24 +143,40 @@ def search_list(request):
     return render(request, 'blog/list.html', locals())
 
 
+# 获取用户ip
+def get_ip(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        return request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        return request.META['REMOTE_ADDR']
+
+
 # 点赞
 def loves(request, pk):
     response_data = {}
     # 点击‘点赞’按钮时候先去增加对应文章的点击量
     post_list = get_object_or_404(Post, pk=pk)
-    post_list.increase_loves()
-    # 获取对应文章的点赞量，拿到的是queryset对象
-    to_laud = Post.objects.filter(pk=pk).values('loves')
-    # ValuesQuerySet对象需要先转换成list,再取出list中的value
-    to_laud_value = list(to_laud)[0].get('loves')
+    # 根据ip判断是否以及点赞过了
+    ip = get_ip(request)
+    if Poll.objects.filter(ip=ip, blog=post_list).exists():
+        response_data["success"] = False
+        response_data["tip"] = '<script>alert("您已点过赞！");window.history.back(-1);"</script>'
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        Poll.objects.create(ip=ip, blog_id=pk)
+        post_list.increase_loves()
+        # 获取对应文章的点赞量，拿到的是queryset对象
+        to_laud = Post.objects.filter(pk=pk).values('loves')
+        # ValuesQuerySet对象需要先转换成list,再取出list中的value
+        to_laud_value = list(to_laud)[0].get('loves')
 
-    # 测试下如果传递一个较为复杂的json给前端，前端解析：var json = eval(result);alert(json.list[0].fields.loves)
-    # serializers.serialize可以这么序列化成json，如果是直接fitler或all的数据
-    # response_data['list'] = json.loads(serializers.serialize('json', Post.objects.filter(pk=pk)))
+        # 测试下如果传递一个较为复杂的json给前端，前端解析：var json = eval(result);alert(json.list[0].fields.loves)
+        # serializers.serialize可以这么序列化成json，如果是直接fitler或all的数据
+        # response_data['list'] = json.loads(serializers.serialize('json', Post.objects.filter(pk=pk)))
 
-    response_data["success"] = True
-    response_data["loves"] = to_laud_value
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+        response_data["success"] = True
+        response_data["loves"] = to_laud_value
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 # life
