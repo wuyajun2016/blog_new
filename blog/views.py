@@ -7,6 +7,7 @@ import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 import pdb
+import socket
 
 
 # 类似controller层，查询数据库，返回对应数据给前端展示
@@ -157,26 +158,26 @@ def loves(request, pk):
     # 点击‘点赞’按钮时候先去增加对应文章的点击量
     post_list = get_object_or_404(Post, pk=pk)
     # 根据ip判断是否以及点赞过了
-    ip = get_ip(request)
-    if Poll.objects.filter(ip=ip, blog=post_list).exists():
-        response_data["success"] = False
-        response_data["tip"] = '<script>alert("您已点过赞！");window.history.back(-1);"</script>'
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        Poll.objects.create(ip=ip, blog_id=pk)
-        post_list.increase_loves()
-        # 获取对应文章的点赞量，拿到的是queryset对象
-        to_laud = Post.objects.filter(pk=pk).values('loves')
-        # ValuesQuerySet对象需要先转换成list,再取出list中的value
-        to_laud_value = list(to_laud)[0].get('loves')
+    # ip = get_ip(request)
+    # if Poll.objects.filter(ip=ip, blog=post_list).exists():
+    #     response_data["success"] = False
+    #     response_data["tip"] = '<script>alert("您已点过赞！");window.history.back(-1);"</script>'
+    #     return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # else:
+    #     Poll.objects.create(ip=ip, blog_id=pk)
+    post_list.increase_loves()
+    # 获取对应文章的点赞量，拿到的是queryset对象
+    to_laud = Post.objects.filter(pk=pk).values('loves')
+    # ValuesQuerySet对象需要先转换成list,再取出list中的value
+    to_laud_value = list(to_laud)[0].get('loves')
 
-        # 测试下如果传递一个较为复杂的json给前端，前端解析：var json = eval(result);alert(json.list[0].fields.loves)
-        # serializers.serialize可以这么序列化成json，如果是直接fitler或all的数据
-        # response_data['list'] = json.loads(serializers.serialize('json', Post.objects.filter(pk=pk)))
+    # 测试下如果传递一个较为复杂的json给前端，前端解析：var json = eval(result);alert(json.list[0].fields.loves)
+    # serializers.serialize可以这么序列化成json，如果是直接fitler或all的数据
+    # response_data['list'] = json.loads(serializers.serialize('json', Post.objects.filter(pk=pk)))
 
-        response_data["success"] = True
-        response_data["loves"] = to_laud_value
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    response_data["success"] = True
+    response_data["loves"] = to_laud_value
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 # life
