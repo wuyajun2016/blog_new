@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+{% block title %}
+<title>登录-近涛个人博客 - 是一个专注软件测试的网站</title>
+{% endblock title %}
+<meta name="keywords" content="软件测试，IT，计算机" />
+<meta name="description" content="近涛个人博客，是一个专注软件测试的网站，发表功能测试，性能测试，自动化测试相关的文章" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block css %}
+<link rel="stylesheet" href="{% static 'blog/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/m.css' %}">
+{% endblock css %}
+{#引入网站图标#}
+<link rel="shortcut icon" href="../../static/blog/images/favicon.ico">
+<!--[if lt IE 9]>
+    <script src="{% static 'blog/js/modernizr.js' %}"></script>
+<![endif]-->
+
+</head>
+<body>
+<header>
+  <div id="mnav">
+    <div class="logo"><a href="/">近涛个人博客</a></div>
+    <h2 id="mnavh"><span class="navicon"></span></h2>
+    <ul id="starlist">
+      <li><a href="/">首页</a></li>
+      <li><a href="{% url 'blog:category_list' %}">分类</a></li>
+      <li><a href="{% url 'blog:life'%}">享生活</a></li>
+      <li><a href="index.html">登录/注册</a></li>
+    </ul>
+  </div>
+  <script>
+window.onload = function ()
+{
+	var oH2 = document.getElementById("mnavh");
+	var oUl = document.getElementById("starlist");
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</header>
+<div class="line46"></div>
+<article>
+  <div class="blank"></div>
+  <div class="leftbox">
+  {% block left %}
+    <div class="search">
+      <h2 class="hometitle">使用第三方账户账户登录</h2>
+      <div class="blank"></div>
+      <div  style="text-align: center">登录后见证奇迹</div>
+      <div><a href="{% url 'user:git_login' %}"><img style="margin:auto;width: 40px;height: 40px;" src="../../static/blog/images/github.png"></a></div>
+    </div>
+    <div class="blank"></div>
+  {% endblock left %}
+  </div>
+  <div class="rightbox">
+  {% block right %}
+    <div class="paihang">
+      <div class="ad"><a href="https://promotion.aliyun.com/ntms/act/group/team.html?group=dPtcChC65d" target="_blank"><img src="../../static/blog/images/ad2.png"></a></div>
+    </div>
+    <div class="weixin">
+      <h2 class="ab_title">微信公众号</h2>
+      <ul>
+        <img src="../../static/blog/images/wx.png">
+      </ul>
+    </div>
+  {% endblock right %}
+  </div>
+</article>
+<footer>
+  <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
+</footer>
+</body>
+{% block js %}
+{% endblock js %}
+</html>
