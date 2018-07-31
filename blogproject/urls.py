@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('blog.urls')),     # 让diango能够找到应用的url
+    url(r'', include('blog.urls')),     # 让diango能够找到应用的url(这个是blog应用)
+    url(r'', include('user.urls')),     # 让diango能够找到应用的url(这个user应用)
 ]
