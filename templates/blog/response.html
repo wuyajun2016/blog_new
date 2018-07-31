@@ -49,15 +49,27 @@ window.onload = function ()
   <div class="blank"></div>
   <div class="leftbox">
   <div class="container">
-    <h2>{{message_title|safe}}</h2>
-    <p class="text-center">
-         {{message|safe}}
-       </p>
-    {% if goto_page %}
-    <p class="text-center">
-        本页面在 <b><span id="time_left"></span></b> 秒后自动跳转，若未跳转，请点击<a href="{{goto_url}}">此处</a>
-       </p>
-    {% endif %}
+    <div class="search">
+        <h2 class="hometitle">{{message_title|safe}}</h2>
+        <div class="blank"></div>
+        <div><img style="margin:auto;width: 40px;height: 40px;" src="{{image_url|safe}}"></div>
+        <div class="blank"></div>
+        <div  style="text-align: center">{{message|safe}}</div>
+        <div class="blank"></div>
+        {% if goto_page %}
+        <p style="text-align: center">
+            本页面在 <b><span id="time_left"></span></b> 秒后自动跳转，若未跳转，请点击<a href="{{goto_url}}">此处</a>
+        </p>
+        {% endif %}
+        <div class="blank"></div>
+        <div class="blank"></div>
+    </div>
+
+    <div class="blank"></div>
+    <div class="blank"></div>
+    <div class="blank"></div>
+    <div class="blank"></div>
+
   </div>
 
   </div>
@@ -69,8 +81,6 @@ window.onload = function ()
   <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
 </footer>
 </body>
-<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 {% if goto_page %}   <!-- 自动页面跳转 -->
     $(function(){

@@ -108,7 +108,7 @@ GITHUB_APP_ID = '764a5f5e3fe64479491a'
 
 GITHUB_KEY = '7d0d1bc68e77719ac4e0b509d05dd9036bcf0be4'
 
-GITHUB_CALLBACK_URL = 'http://www.wuzihan.top/oauth/github_check'
+GITHUB_CALLBACK_URL = 'http://www.wuzihan.top/oauth/git_check'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
