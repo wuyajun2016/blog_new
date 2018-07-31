@@ -39,7 +39,6 @@ def git_check(request):
     # oauth_git.openid这样可以直接取到方法中的返回的self.openid
     open_id = str(oauth_git.openid)
     signature = infos.get('bio', '')
-    pdb.set_trace()
     if not signature:
         signature = "无个性签名"
     githubs = OAuth_ex.objects.filter(openid=open_id, oauth_type=type)   # 查询是否该第三方账户已绑定本网站账号

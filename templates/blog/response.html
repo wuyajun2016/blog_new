@@ -52,7 +52,9 @@ window.onload = function ()
     <div class="search">
         <h2 class="hometitle">{{message_title|safe}}</h2>
         <div class="blank"></div>
-        <div><img style="margin:auto;width: 40px;height: 40px;" src="{{image_url|safe}}"></div>
+        {% if image_url %}
+             <div><img style="margin:auto;width: 40px;height: 40px;" src="{{image_url|safe}}"></div>
+        {% endif %}
         <div class="blank"></div>
         <div  style="text-align: center">{{message|safe}}</div>
         <div class="blank"></div>
@@ -81,6 +83,8 @@ window.onload = function ()
   <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
 </footer>
 </body>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 {% if goto_page %}   <!-- 自动页面跳转 -->
     $(function(){
