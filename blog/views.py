@@ -31,7 +31,7 @@ def index(request):
 # 详情页
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)    # django get操作，也就封装了一个返回对象为空时候的处理
-    # 拿到文章对应的life值
+    # 拿到文章对应的life值（用来过滤是否是生活相关主题）
     glife = Post.objects.filter(pk=pk).values('life')
     get_life = list(glife)[0].get('life')
     # 上一篇/下一篇
@@ -192,6 +192,10 @@ def life(request):
     totalPage = page_list.get('totalPage')
     post_list = page_list.get('post_list')
     return render(request, 'blog/life.html', locals())
+
+
+def login(request):
+    return render(request, 'blog/login.html')
 
 
 # 分页方法
