@@ -1,16 +1,19 @@
 {% load staticfiles %}
-{% load blog_tags %}
 <!doctype html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>登录_近涛个人博客 - 是一个专注软件测试的网站</title>
+{% block title %}
+<title>用户中心-近涛个人博客 - 是一个专注软件测试的网站</title>
+{% endblock title %}
 <meta name="keywords" content="软件测试，IT，计算机" />
 <meta name="description" content="近涛个人博客，是一个专注软件测试的网站，发表功能测试，性能测试，自动化测试相关的文章" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block css %}
 <link rel="stylesheet" href="{% static 'blog/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
 <link rel="stylesheet" href="{% static 'blog/css/m.css' %}">
+{% endblock css %}
 {#引入网站图标#}
 <link rel="shortcut icon" href="../../static/blog/images/favicon.ico">
 <!--[if lt IE 9]>
@@ -33,8 +36,8 @@
   <script>
 window.onload = function ()
 {
-	var oH2 = document.getElementById("mnavh"); 
-	var oUl = document.getElementById("starlist");  
+	var oH2 = document.getElementById("mnavh");
+	var oUl = document.getElementById("starlist");
 	oH2.onclick = function ()
 	{
 		var style = oUl.style;
@@ -42,50 +45,45 @@ window.onload = function ()
 		oH2.className = style.display == "block" ? "open" : ""
 	}
 }
-</script> 
+</script>
 </header>
 <div class="line46"></div>
 <article>
   <div class="blank"></div>
   <div class="leftbox">
-  <div class="container">
+  {% block left %}
     <div class="search">
-        <h2 class="hometitle">{{message_title|safe}}</h2>
-        <div class="blank"></div>
-        {% if image_url %}
-             <div><img style="margin:auto;width: 40px;height: 40px;" src="{{image_url|safe}}"></div>
-        {% endif %}
-        <div class="blank"></div>
-        <div  style="text-align: center">{{message|safe}}</div>
-        <div class="blank"></div>
-        {% if goto_page %}
-        <p style="text-align: center">
-            本页面在 <b><span id="time_left"></span></b> 秒后自动跳转，若未跳转，请点击<a href="{{goto_url}}">此处</a>
-        </p>
-        {% endif %}
-        <div class="blank"></div>
-        <div class="blank"></div>
+      <h2 class="hometitle">用户信息</h2>
+      <div class="blank"></div>
+      <div>昵称：<span>{{ user.username }}</span></div>
+      <div class="blank"></div>
+      <div>邮箱：<span>{{ user.email }}</span></div>
+      <div class="blank"></div>
+      <h1>用户中心未完成，后续更新...<span></span></h1>
     </div>
-
     <div class="blank"></div>
-    <div class="blank"></div>
-    <div class="blank"></div>
-    <div class="blank"></div>
-
-  </div>
-
+  {% endblock left %}
   </div>
   <div class="rightbox">
-
+  {% block right %}
+    <div class="paihang">
+      <div class="ad"><a href="https://promotion.aliyun.com/ntms/act/group/team.html?group=dPtcChC65d" target="_blank"><img src="../../static/blog/images/ad2.png"></a></div>
+    </div>
+    <div class="weixin">
+      <h2 class="ab_title">微信公众号</h2>
+      <ul>
+        <img src="../../static/blog/images/wx.png">
+      </ul>
+    </div>
+  {% endblock right %}
   </div>
 </article>
 <footer>
   <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
 </footer>
 </body>
-<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+{% block js %}
+    <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
     //检查登录状态
@@ -103,19 +101,5 @@ $(document).ready(function(){
     });
  });
 </script>
-<script type="text/javascript">
-{% if goto_page %}   <!-- 自动页面跳转 -->
-    $(function(){
-        var time = {{goto_time}} / 1000;
-        intervalid = window.setInterval(function(){
-            if (time <= 0){
-                clearInterval(intervalid);
-                window.location = '{{goto_url}}';
-            }
-            $('#time_left').text(time);
-            time -= 1;
-        },1000);
-    });
-{% endif %}
-</script>
+{% endblock js %}
 </html>

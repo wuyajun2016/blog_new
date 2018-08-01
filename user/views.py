@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 import time
 import uuid
 from .forms import BindEmail
+from django.http import HttpResponse
 import pdb
 
 
@@ -75,6 +76,26 @@ def git_check(request):
     data['image_url'] = image_url
     data['message'] = u'绑定成功！您的用户名为：<b>%s</b>。您现在可以同时使用本站账号和此第三方账号登录本站了！' % nickname
     return render_to_response('blog/response.html', data)
+
+
+# 检查是否为登录状态
+def check_is_login(request):
+    if request.user.is_authenticated():
+        user = request.user.username
+        returnText = u'''你好,<a href="/blog/user_center">%s</a>''' % (user)
+    else:
+        returnText = u''' <a href="/login">登录</a>'''
+    return HttpResponse(returnText, content_type="application/json")
+
+
+# 用户中心(进入用户中心时判断下是否已经登录了，如果已经登录了才放行)
+# django中使用request.user.is_authenticated()来判断是否已登录
+def user_center(request):
+    if request.user.is_authenticated():
+        user = request.user
+        return render_to_response('blog/usercenter.html', locals())
+    else:
+        return render_to_response('/login.html')
 
 
 # 看了下，github注册时候邮箱是必填的，所以应当都能获取到，这个方法尚未得到测试

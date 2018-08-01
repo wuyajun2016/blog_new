@@ -166,3 +166,5 @@ h3.blogtitle:hover a { color: #000 }
 #diggnum { margin: 5px; }
 .zsm { text-align: center; font-size: 16px; font-weight: bold; display: none }
 .zsm img { margin: auto }
+.weather { background: url(../images/weather_bg.jpg) no-repeat; height: 88px; margin: 20px 0;padding: 20px 0 0 75px; }
+.banner { background: url(../images/banner_top.jpg) top center; height: 265px; overflow: hidden }
