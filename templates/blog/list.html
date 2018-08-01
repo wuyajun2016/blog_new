@@ -26,7 +26,7 @@
       <li><a href="/">首页</a></li>
       <li><a href="{% url 'blog:category_list' %}">分类</a></li>
       <li><a href="{% url 'blog:life'%}">享生活</a></li>
-      <li><a href="{% url 'blog:login'%}">登录</a></li>
+      <li id="user_part"><a href="{% url 'blog:login'%}">登录</a></li>
     </ul>
 </div>
 <script>
@@ -119,6 +119,24 @@ window.onload = function ()
   <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
 </footer>
 </body>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    //检查登录状态
+    $.ajax({
+        type:"GET",
+        url:"{% url 'user:check_is_login' %}",
+        cache:false,
+        dataType:'text',
+        success:function(result){
+            $("#user_part").html(result);
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            $("#user_part").html('<a href="{% url 'blog:login'%}">登录</a>');
+        }
+    });
+ });
+</script>
 <script>
     function getUrl() {
         var current_url = window.location.href;

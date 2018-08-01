@@ -82,7 +82,7 @@ def git_check(request):
 def check_is_login(request):
     if request.user.is_authenticated():
         user = request.user.username
-        returnText = u'''你好,<a href="/blog/user_center">%s</a>''' % (user)
+        returnText = u'''<a href="/blog/user_center">你好,%s</a>''' % (user)
     else:
         returnText = u''' <a href="/login">登录</a>'''
     return HttpResponse(returnText, content_type="application/json")
