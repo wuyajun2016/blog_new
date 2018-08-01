@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>首页_近涛个人博客 - 是一个专注软件测试的网站</title>
+<title>详情页_近涛个人博客 - 是一个专注软件测试的网站</title>
 <meta name="keywords" content="软件测试，IT，计算机" />
 <meta name="description" content="近涛个人博客，是一个专注软件测试的网站，发表功能测试，性能测试，自动化测试相关的文章" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +35,7 @@ span{
       <li><a href="/">首页</a></li>
       <li><a href="{% url 'blog:category_list' %}">分类</a></li>
       <li><a href="{% url 'blog:life'%}">享生活</a></li>
-      <li><a href="{% url 'blog:login'%}">登录</a></li>
+      <li id="user_part"><a href="{% url 'blog:login'%}">登录</a></li>
     </ul>
 </div>
 <script>
@@ -167,7 +167,24 @@ window.onload = function ()
   <p>Design by <a href="/">近涛个人博客</a> <a href="/">浙ICP备17019539号-1</a></p>
 </footer>
 </body>
-
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    //检查登录状态
+    $.ajax({
+        type:"GET",
+        url:"{% url 'user:check_is_login' %}",
+        cache:false,
+        dataType:'text',
+        success:function(result){
+            $("#user_part").html(result);
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            $("#user_part").html('<a href="{% url 'blog:login'%}">登录</a>');
+        }
+    });
+ });
+</script>
 <script>
     {#<!--增加点赞量-->#}
     $("#loves").on("click",function () {
