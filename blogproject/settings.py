@@ -104,9 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # github
-GITHUB_APP_ID = '764a5f5e3fe64479491a'
+GITHUB_APP_ID = '****'
 
-GITHUB_KEY = '7d0d1bc68e77719ac4e0b509d05dd9036bcf0be4'
+GITHUB_KEY = '************'
 
 GITHUB_CALLBACK_URL = 'http://www.wuzihan.top/oauth/git_check'
 
