@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'bind_email', views.bind_email, name='bind_email'),   # 通过邮箱将第三方账户绑定到本站账号
     url(r'user_center', views.user_center, name='user_center'),
     url(r'check_is_login', views.check_is_login, name='check_is_login'),
+    url(r'nickname_change', views.nickname_change, name='nickname_change'),
 ]

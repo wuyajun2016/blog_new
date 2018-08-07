@@ -3,6 +3,28 @@ from user.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from .models import OAuth_ex
+import pdb
+
+
+class ChangeNickForm(forms.Form):
+    old_nickname = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'old_nickname'}))
+    nickname = forms.CharField(label=u'新的昵称', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                                           'id': 'nickname',
+                                                                                           'placeholder': '请输入昵称'}),
+                               error_messages={'required': u'昵称不能为空'})
+
+    def clean_nickname(self):
+        old_nickname = self.cleaned_data.get('old_nickname')
+        nickname = self.cleaned_data.get('nickname')
+        is_exist = User.objects.filter(username=nickname).count() > 0
+
+        if is_exist:
+            if old_nickname == nickname:
+                raise ValidationError(u'您当前的昵称就是"%s",写一个新的吧' % nickname)
+            else:
+                raise ValidationError(u'"%s已被使用"，请重新输入' % nickname)
+        else:
+            return nickname
 
 
 class BindEmail(forms.Form):

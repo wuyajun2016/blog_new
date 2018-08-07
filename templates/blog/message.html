@@ -53,17 +53,34 @@ window.onload = function ()
   <div class="leftbox">
   {% block left %}
     <div class="search">
-      <h2 class="hometitle">用户信息</h2>
-      <div class="blank"></div>
-      <div>昵称：<span>{{ user.username }}&nbsp;&nbsp;&nbsp;<a style="color:#337ab7" href="{% url 'user:nickname_change' %}">修改昵称</a></span></div>
+       <h3 >{{form_title}}</h3>
+            <form method='post'>
+                {%csrf_token%}
+                {% for field in form %}
+                    {# 区分是否是hidden字段 #}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% else %}
+                        <h2 class="hometitle">修改用户信息</h2>
+                        <div class="blank"></div>
+                        <div style="text-align: center">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                        </div>
+                        {# 错误提示信息 #}
+                        <div class="blank"></div>
+                        <p style="text-align: center">
+                            {{ field.errors.as_text }}
+                        </p>
+                    {%endif%}
+                {%endfor%}
 
-      <div class="blank"></div>
-      <div>邮箱：<span>{{ user.email }}</span></div>
-      <div class="blank"></div>
-      <h1>近涛个人博客发红包了，在支付宝输入下图中的口令即可斩获红包<span></span></h1>
-      <div class="paihang">
-        <div class="ad" style=""><img src="../../static/blog/images/redp.png"></div>
-      </div>
+                <div style="margin:20px auto;width:10px">
+                    <input type="submit" value="{{submit_name}}"/>
+                </div>
+            </form>
     </div>
     <div class="blank"></div>
   {% endblock left %}

@@ -10,6 +10,7 @@ import time
 import uuid
 from .forms import BindEmail
 from django.http import HttpResponse
+from .forms import ChangeNickForm
 import pdb
 
 
@@ -19,7 +20,9 @@ def git_login(request):   # 获取code
     return HttpResponseRedirect(url)
 
 
+# github登录成功后，会进入的此方法（为什么呢，初步测试应当是需要配置的回调URL中的最后一个/后面的值和这个方法名一直）
 def git_check(request):
+    # pdb.set_trace()
     type = '1'
     request_code = request.GET.get('code')
     oauth_git = OAuth_GITHUB(settings.GITHUB_APP_ID, settings.GITHUB_KEY, settings.GITHUB_CALLBACK_URL)
@@ -82,7 +85,7 @@ def git_check(request):
 def check_is_login(request):
     if request.user.is_authenticated():
         user = request.user.username
-        returnText = u'''<a href="/blog/user_center">你好,%s</a>''' % (user)
+        returnText = u'''<a href="/user_center">你好,%s</a>''' % (user)
     else:
         returnText = u''' <a href="/login">登录</a>'''
     return HttpResponse(returnText, content_type="application/json")
@@ -96,6 +99,33 @@ def user_center(request):
         return render_to_response('blog/usercenter.html', locals())
     else:
         return render_to_response('/login.html')
+
+
+def nickname_change(request):
+    data = dict()
+    data['form-title'] = u'修改昵称'
+    data['submit_name'] = u'确定'
+
+    if request.method == 'POST':
+        form = ChangeNickForm(request.POST)
+        # pdb.set_trace()
+        if form.is_valid():
+            nickname = form.cleaned_data['nickname']
+            request.user.username = nickname
+            request.user.save()
+
+            data['goto_url'] = 1
+            data['goto_time'] = 3000
+            data['goto_page'] = True
+            data['message'] = u'修改昵称成功，修改为“%s”' % nickname
+            return render(request, 'blog/usercenter.html', data)
+    else:
+        nickname = request.user.username
+        form = ChangeNickForm(initial={'old_nickname': nickname, 'nickname': nickname})
+        data['form'] = form
+        return render(request, 'blog/message.html', data)
+    data['form'] = form
+    return render(request, 'blog/message.html', data)
 
 
 # 看了下，github注册时候邮箱是必填的，所以应当都能获取到，这个方法尚未得到测试
