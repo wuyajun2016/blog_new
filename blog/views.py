@@ -158,7 +158,7 @@ def loves(request, pk):
     # 点击‘点赞’按钮时候先去增加对应文章的点击量
     post_list = get_object_or_404(Post, pk=pk)
     # 根据ip判断是否以及点赞过了
-    # ip = get_ip(request)
+    ip = get_ip(request)
     # if Poll.objects.filter(ip=ip, blog=post_list).exists():
     #     response_data["success"] = False
     #     response_data["tip"] = '<script>alert("您已点过赞！");window.history.back(-1);"</script>'
@@ -177,6 +177,7 @@ def loves(request, pk):
 
     response_data["success"] = True
     response_data["loves"] = to_laud_value
+    response_data["ip"] = ip
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
