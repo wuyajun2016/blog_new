@@ -98,7 +98,7 @@ def user_center(request):
         user = request.user
         return render_to_response('blog/usercenter.html', locals())
     else:
-        return render_to_response('/login.html')
+        return render_to_response('blog/login.html')
 
 
 def nickname_change(request):
